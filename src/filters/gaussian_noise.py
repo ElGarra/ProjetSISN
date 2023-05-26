@@ -1,0 +1,74 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage import data, util, io
+
+class GaussianNoise():
+    def __init__(self, image, image_name):
+        self.image = image
+        self.image_name = image_name
+        self.mean = 0
+        self.std_dev = 0.15
+
+    def charge_image_as_float(self):
+        # Convert the image to float oint within the valid range [0, 1]
+        self.image_float = util.img_as_float(self.image)
+        
+    def add_gaussian_noise(self):
+        # Generate the gaussian bruit with the same dimentions of the image
+        noise = np.random.normal(self.mean, self.std_dev, self.image_float.shape)
+        # Add the bruit to the image
+        self.noisy_image = self.image_float + noise
+        # Ensures that the values are within the valid range [0, 1]
+        self.noisy_image = np.clip(self.noisy_image, 0, 1)
+        return self.noisy_image
+        
+    def calculate_difference(self):
+        # Calculate the diference between the original image and the filtered image
+        self.difference = self.image_float - self.noisy_image
+
+    def save_images(self):
+        # Save the original image as PNG
+        io.imsave(f'assets/{self.image_name}/{self.image_name}.png', util.img_as_ubyte(self.image_float))
+        # Save the filtered image as PNG
+        io.imsave(f'assets/{self.image_name}/filtered_{self.image_name}.png', util.img_as_ubyte(self.noisy_image))
+        # Save the difference as PNG
+        io.imsave(f'assets/{self.image_name}/difference_{self.image_name}.png', util.img_as_ubyte(self.difference))
+
+    def generate_histogram(self):
+        hist, bins = np.histogram(self.difference.flatten(), bins=256, range=(-1, 1))
+        # Plot and save the histogram as a PNG image
+        plt.figure(figsize=(8, 4))
+        plt.plot(bins[:-1], hist, color='black')
+        plt.title('Histogram of the difference (Noise)')
+        plt.xlabel('Pixel value')
+        plt.ylabel('Frequency')
+        plt.savefig(f'assets/{self.image_name}/histogram_{self.image_name}.png', dpi=300)
+        plt.close()
+
+    def plot_images(self):
+        fig, axes = plt.subplots(1, 4, figsize=(12, 3))
+        axes[0].imshow(self.image_float, cmap='gray')
+        axes[0].set_title('Original Image')
+        axes[0].axis('off')
+        axes[1].imshow(self.noisy_image, cmap='gray')
+        axes[1].set_title('Noisy Image')
+        axes[1].axis('off')
+        axes[2].imshow(self.difference, cmap='gray')
+        axes[2].set_title('Difference (Noise)')
+        axes[2].axis('off')
+        axes[3].hist(self.difference.flatten(), bins=256, color='black')
+        axes[3].set_title('Histogram of Difference (Noise)')
+        axes[3].set_xlabel('Pixel Value')
+        axes[3].set_ylabel('Frequency')
+
+        plt.suptitle('Gaussian Noise Analysis on Image')
+        plt.tight_layout()
+        plt.show()
+
+    def execute(self):
+        self.charge_image_as_float()
+        self.add_gaussian_noise()
+        self.calculate_difference()
+        self.save_images()
+        self.generate_histogram()
+        self.plot_images()

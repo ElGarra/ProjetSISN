@@ -3,20 +3,27 @@ Script created to work as interactive menu during the execution of the code.
 It works in the terminal, please follow the instructions.
 """
 import sys
+from skimage import data
+from .filters.gaussian_noise import GaussianNoise
+# from .filters.filters import apply_filter
+# from .methods.methods import generate_metrics_table
 
 class Menu():
 
     def __init__(self) -> None:
         print("####################################################################################################\n")
         print(" --> Welcome to the interactive console of the project 'Methods for improving image quality'\n")
-        self.main_question = " --> What would you like to do now? Please choose an option:\n\n \
-    [1] Apply all filters in all images\n \
-    [2] Apply all filters in one image\n \
-    [3] Apply one filter in all images\n \
-    [4] Apply one filter in one image\n \
+        self.main_question = " --> Which image would you like to work with? Please choose an option:\n\n \
+    [1] clock\n \
+    [2] moon\n \
+    [3] camera\n \
+    [4] coins\n \
+    [4] hubble_deep_fiel\n \
     [5] Exit\n\n"
         self.error_message = "\nInvalid command, please try again.\n"
-        self.main_options_list = list(range(1, 6))
+        self.main_options_list = list(range(1, 7))
+        self.image_name = ""
+        self.filters = ['median', 'gaussian', 'wiener', 'laplace']
 
     def options(self):
         print("####################################################################################################\n")
@@ -26,19 +33,27 @@ class Menu():
             option = int(input(self.main_question))
         else:
             if option == 1:
-                # Call respective function for 1
-                print(option)
+                self.image = data.clock()
+                self.image_name = "clock"
             elif option == 2:
-                # Call respective function for 2
-                print(option)
+                self.image = data.moon()
+                self.image_name = "moon"
             elif option == 3:
-                # Call respective function for 3
-                print(option)
+                self.image = data.camera()
+                self.image_name = "camera"
             elif option == 4:
-                # Call respective function for 4
-                print(option)
+                self.image = data.coins()
+                self.image_name = "coins"
+            elif option == 5:
+                self.image = data.hubble_deep_field()
+                self.image_name = "hubble_deep_field"
             else:
                 sys.exit("See you soon!")
+        self.apply_degradation()
+        
+    def apply_degradation(self):
+        gaussian_noise = GaussianNoise(self.image, self.image_name)
+        gaussian_noise.execute()
 
     def execute(self):
         self.options()            
