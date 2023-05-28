@@ -6,11 +6,14 @@ import sys
 from skimage import data, io, filters, util
 from .filters.degradation.gaussian_noise import GaussianNoise
 from .filters.reconstruction.median_filter import MedianFilter
+from .filters.degradation.convolutional_noise import ConvolutionalNoise
+from .filters.reconstruction.wiener_filter import WienerFilter
+from .methods.methods import ImageComparison
 import matplotlib.pyplot as plt
 
 class Menu():
 
-    def __init__(self) -> None:
+    def __init__(self):
         print("####################################################################################################\n")
         print(" --> Welcome to the interactive console of the project 'Methods for improving image quality'\n")
         self.main_question = " --> Which image would you like to work with? Please choose an option:\n\n \
@@ -47,14 +50,20 @@ class Menu():
                 sys.exit("See you soon!")
         
     def apply_filters(self):
-        self.gaussian_noise = GaussianNoise(self.image, self.image_name)
-        self.gaussian_noise.execute()
-        self.median_filter = MedianFilter(self.gaussian_noise.image_name)
-        self.median_filter.execute()
+        # self.gaussian_noise = GaussianNoise(self.image, self.image_name)
+        # self.gaussian_noise.execute()
+        # self.median_filter = MedianFilter(self.gaussian_noise.image_name)
+        # self.median_filter.execute()
+        self.convolutional_noise = ConvolutionalNoise(self.image, self.image_name)
+        self.convolutional_noise.execute()
+        self.wiener_filter = WienerFilter(self.convolutional_noise.image_name)
+        self.wiener_filter.execute()
 
     def show_summary(self):
-        self.noisy_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png')
-        self.rebuilt_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/median_rebuilt_{self.image_name}.png')
+        # self.noisy_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png')
+        self.noisy_image = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png')
+        # self.rebuilt_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/median_rebuilt_{self.image_name}.png')
+        self.rebuilt_image = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png')
         # Configurar el tamaño de la figura y los subplots
         fig, axes = plt.subplots(1, 3, figsize=(12, 4))
 
@@ -79,15 +88,27 @@ class Menu():
         axes[2].set_title('rebuilt Image')
 
         # Ajustar el espacio entre subplots y mostrar la figura
-        plt.suptitle('Analysis of degradation with additive Gaussian noise & median-filtered reconstruction\n')
+        # plt.suptitle('Analysis of degradation with additive Gaussian noise & median-filtered reconstruction\n')
+        plt.suptitle('Analysis of degradation with additive + Convolutional Gaussian noise & wiener-filtered reconstruction\n')
         plt.tight_layout()
         plt.show()
+
+    def calculate_methods(self):
+        self.original_path = f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/{self.image_name}.png'
+        self.degradated_path = f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png'
+        self.rebuilt_path = f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png'
+        self.comparison_1 = ImageComparison(self.original_path, self.degradated_path)
+        self.comparison_1.execute()
+        self.comparison_2 = ImageComparison(self.original_path, self.rebuilt_path)
+        self.comparison_2.execute()
 
 
     def execute(self):
         self.options()  
         self.apply_filters()   
         self.show_summary()       
+        self.calculate_methods()
+
 
 
         
