@@ -20,10 +20,9 @@ class Menu():
     [1] clock\n \
     [2] moon\n \
     [3] camera\n \
-    [4] coins\n \
-    [5] Exit\n\n"
+    [4] Exit\n\n"
         self.error_message = "\nInvalid command, please try again.\n"
-        self.main_options_list = list(range(1, 6))
+        self.main_options_list = list(range(1, 5))
         self.image_name = ""
         self.filters = ['median', 'gaussian', 'wiener', 'laplace']
 
@@ -43,9 +42,6 @@ class Menu():
             elif option == 3:
                 self.image = data.camera()
                 self.image_name = "camera"
-            elif option == 4:
-                self.image = data.coins()
-                self.image_name = "coins"
             else:
                 sys.exit("See you soon!")
         
