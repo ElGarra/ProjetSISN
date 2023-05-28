@@ -10,6 +10,7 @@ class ImageComparison:
         self.ssim = None
         self.mse = None
         self.snr = None
+        self.nmi = None
 
     def calculate_metrics(self):
         # Calculate SSIM
@@ -21,12 +22,16 @@ class ImageComparison:
         # Calculate SNR
         self.snr = metrics.peak_signal_noise_ratio(self.image1, self.image2)
 
+        # Calculate NMI
+        self.nmi = metrics.normalized_mutual_information(self.image1, self.image2)
+
     def plot_results(self):
         # Create a table to display the metrics
         table_data = [
             ['SSIM', self.ssim],
             ['MSE', self.mse],
-            ['SNR', self.snr]
+            ['SNR', self.snr],
+            ['NMI', self.nmi]
         ]
         
         fig, ax = plt.subplots()
