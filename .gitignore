@@ -3,3 +3,4 @@ virtualenv/
 *.png
 test.py
 test_crypto.py
+_pycache_/
