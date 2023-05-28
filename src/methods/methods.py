@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 from skimage import io, metrics
 
 class ImageComparison:
-    def __init__(self, image1_path, image2_path):
+    def __init__(self, image1_path, image2_path, title):
         self.image1 = io.imread(image1_path)
         self.image2 = io.imread(image2_path)
+        self.title = title
         self.ssim = None
         self.mse = None
         self.snr = None
@@ -38,6 +39,7 @@ class ImageComparison:
         ax.axis('off')
 
         # Show the table
+        plt.suptitle(f'{self.title}\n')
         plt.show()
 
     def execute(self):

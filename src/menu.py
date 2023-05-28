@@ -46,57 +46,101 @@ class Menu():
                 sys.exit("See you soon!")
         
     def apply_filters(self):
-        # self.gaussian_noise = GaussianNoise(self.image, self.image_name)
-        # self.gaussian_noise.execute()
-        # self.median_filter = MedianFilter(self.gaussian_noise.image_name)
-        # self.median_filter.execute()
+        self.gaussian_noise = GaussianNoise(self.image, self.image_name)
+        self.gaussian_noise.execute()
+        self.median_filter = MedianFilter(self.gaussian_noise.image_name)
+        self.median_filter.execute()
         self.convolutional_noise = ConvolutionalNoise(self.image, self.image_name)
         self.convolutional_noise.execute()
         self.wiener_filter = WienerFilter(self.convolutional_noise.image_name)
         self.wiener_filter.execute()
 
     def show_summary(self):
-        # self.noisy_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png')
-        self.noisy_image = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png')
-        # self.rebuilt_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/median_rebuilt_{self.image_name}.png')
-        self.rebuilt_image = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png')
-        # Configurar el tamaño de la figura y los subplots
-        fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+        # Load the first set of images
+        noisy_image1 = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png')
+        rebuilt_image1 = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/median_rebuilt_{self.image_name}.png')
 
-        # Mostrar la imagen original
-        axes[0].imshow(self.image, cmap='gray')
-        axes[0].set_title('Original Image')
-        axes[0].axis('off')
+        # Load the second set of images
+        noisy_image2 = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png')
+        rebuilt_image2 = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png')
 
-        # Mostrar la imagen degradada con ruido
-        axes[1].imshow(self.noisy_image, cmap='gray')
-        axes[1].set_title('degraded Image')
-        axes[1].axis('off')
+        # Configure the size of the figure and subplots
+        fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 
-        # Mostrar la imagen reconstruida con filtro de mediana
-        axes[2].imshow(self.rebuilt_image, cmap='gray')
-        axes[2].set_title('Filtered Image')
-        axes[2].axis('off')
+        # Set the main titles for each set of images
+        main_title1 = 'Analysis of degradation with additive Gaussian noise & median-filtered reconstruction'
+        main_title2 = 'Analysis of degradation with additive + Convolutional Gaussian noise & wiener-filtered reconstruction'
 
-        # Agregar leyendas en inglés
-        axes[0].set_title('Original Image')
-        axes[1].set_title('degraded Image')
-        axes[2].set_title('rebuilt Image')
+        # Set the main titles for each set of images
+        fig.suptitle(main_title1, fontsize=16)
 
-        # Ajustar el espacio entre subplots y mostrar la figura
-        # plt.suptitle('Analysis of degradation with additive Gaussian noise & median-filtered reconstruction\n')
-        plt.suptitle('Analysis of degradation with additive + Convolutional Gaussian noise & wiener-filtered reconstruction\n')
+        # Set titles for the first set of images
+        axes[0, 0].set_title('Original Image')
+        axes[0, 1].set_title('Degraded Image')
+        axes[0, 2].set_title('Filtered Image')
+
+        # Show the first set of images
+        axes[0, 0].imshow(self.image, cmap='gray')
+        axes[0, 1].imshow(noisy_image1, cmap='gray')
+        axes[0, 2].imshow(rebuilt_image1, cmap='gray')
+
+        # Hide the axis labels for the first row
+        axes[0, 0].axis('off')
+        axes[0, 1].axis('off')
+        axes[0, 2].axis('off')
+
+        # Update the main title for the second set of images
+        fig.suptitle(main_title2, fontsize=16)
+
+        # Set titles for the second set of images
+        axes[1, 0].set_title('Original Image')
+        axes[1, 1].set_title('Degraded Image')
+        axes[1, 2].set_title('Filtered Image')
+
+        # Show the second set of images
+        axes[1, 0].imshow(self.image, cmap='gray')
+        axes[1, 1].imshow(noisy_image2, cmap='gray')
+        axes[1, 2].imshow(rebuilt_image2, cmap='gray')
+
+        # Hide the axis labels for the second row
+        axes[1, 0].axis('off')
+        axes[1, 1].axis('off')
+        axes[1, 2].axis('off')
+
+        # Adjust the space between subplots and show the figure
         plt.tight_layout()
         plt.show()
 
     def calculate_methods(self):
-        self.original_path = f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/{self.image_name}.png'
-        self.degradated_path = f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png'
-        self.rebuilt_path = f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png'
-        self.comparison_1 = ImageComparison(self.original_path, self.degradated_path)
-        self.comparison_1.execute()
-        self.comparison_2 = ImageComparison(self.original_path, self.rebuilt_path)
-        self.comparison_2.execute()
+        methods = [
+            {
+                'method': 'Aditive/Median',
+                'degraded_path': f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png',
+                'rebuilt_path': f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/median_rebuilt_{self.image_name}.png',
+                'title_1': "Measures Original image vs Degraded image in Aditive noise/Median",
+                'title_2': "Measures Original image vs Rebuilt image in Aditive noise/Median"
+            },
+            {
+                'method': 'Convolution & Adition/Wiener',
+                'degraded_path': f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png',
+                'rebuilt_path': f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png',
+                'title_1': "Measures Original image vs Degraded image in Convolution/Wiener",
+                'title_2': "Measures Original image vs Rebuilt image in Convolution/Wiener"
+            }
+        ]
+
+        for method in methods:
+            original_path = f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/{self.image_name}.png'
+            degraded_path = method['degraded_path']
+            rebuilt_path = method['rebuilt_path']
+            title_1 = method['title_1']
+            title_2 = method['title_2']
+
+            comparison_1 = ImageComparison(original_path, degraded_path, title_1)
+            comparison_1.execute()
+            comparison_2 = ImageComparison(original_path, rebuilt_path, title_2)
+            comparison_2.execute()
+
 
 
     def execute(self):

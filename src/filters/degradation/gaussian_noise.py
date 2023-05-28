@@ -57,10 +57,10 @@ class GaussianNoise():
         axes[0, 1].set_title('Noisy Image')
         axes[0, 1].axis('off')
         axes[1, 0].imshow(self.difference, cmap='gray')
-        axes[1, 0].set_title('Difference (Noise)')
+        axes[1, 0].set_title('Difference')
         axes[1, 0].axis('off')
         axes[1, 1].hist(self.difference.flatten(), bins=256, color='black')
-        axes[1, 1].set_title('Histogram of Difference (Noise)')
+        axes[1, 1].set_title('Histogram of Difference')
         axes[1, 1].set_xlabel('Pixel Value')
         axes[1, 1].set_ylabel('Frequency')
 

@@ -38,14 +38,6 @@ class WienerFilter():
     def calculate_difference(self):
         self.difference = self.image - self.rebuilt_image
 
-    # def save_images(self):
-    #    # Save the reconstrucred image as PNG
-    #     io.imsave(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png', util.img_as_ubyte(self.rebuilt_image))
-    #     print("Primera")
-    #     # Save the difference as PNG
-    #     io.imsave(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_filtered_difference_{self.image_name}.png', util.img_as_ubyte(self.difference))
-    #     print("Segunda")
-
     def save_images(self):
         # Scale the rebuilt image and the difference to the range [0, 1]
         rebuilt_image_scaled = util.img_as_float(self.rebuilt_image)
@@ -84,6 +76,5 @@ class WienerFilter():
         self.load_image()
         self.apply_wiener_filter()
         self.calculate_difference()
-        # self.generate_histogram()
         self.save_images()
         self.plot_results()

@@ -46,6 +46,5 @@ class MedianFilter():
         self.load_image()
         self.apply_median_filter()
         self.calculate_difference()
-        # self.generate_histogram()
         self.save_images()
         self.plot_results()
