@@ -6,6 +6,9 @@ class GaussianNoise():
     def __init__(self, image, image_name):
         self.image = image
         self.image_name = image_name
+        self.image_float = None
+        self.noisy_image = None
+        self.difference = None
         self.mean = 0
         self.std_dev = 0.15
 
@@ -28,11 +31,11 @@ class GaussianNoise():
 
     def save_images(self):
         # Save the original image as PNG
-        io.imsave(f'assets/{self.image_name}/{self.image_name}.png', util.img_as_ubyte(self.image_float))
+        io.imsave(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/{self.image_name}.png', util.img_as_ubyte(self.image_float))
         # Save the filtered image as PNG
-        io.imsave(f'assets/{self.image_name}/filtered_{self.image_name}.png', util.img_as_ubyte(self.noisy_image))
+        io.imsave(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png', util.img_as_ubyte(self.noisy_image))
         # Save the difference as PNG
-        io.imsave(f'assets/{self.image_name}/difference_{self.image_name}.png', util.img_as_ubyte(self.difference))
+        io.imsave(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_difference_{self.image_name}.png', util.img_as_ubyte(self.difference))
 
     def generate_histogram(self):
         hist, bins = np.histogram(self.difference.flatten(), bins=256, range=(-1, 1))
@@ -42,28 +45,29 @@ class GaussianNoise():
         plt.title('Histogram of the difference (Noise)')
         plt.xlabel('Pixel value')
         plt.ylabel('Frequency')
-        plt.savefig(f'assets/{self.image_name}/histogram_{self.image_name}.png', dpi=300)
+        plt.savefig(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/histogram_degradation_{self.image_name}.png', dpi=300)
         plt.close()
 
     def plot_images(self):
-        fig, axes = plt.subplots(1, 4, figsize=(12, 3))
-        axes[0].imshow(self.image_float, cmap='gray')
-        axes[0].set_title('Original Image')
-        axes[0].axis('off')
-        axes[1].imshow(self.noisy_image, cmap='gray')
-        axes[1].set_title('Noisy Image')
-        axes[1].axis('off')
-        axes[2].imshow(self.difference, cmap='gray')
-        axes[2].set_title('Difference (Noise)')
-        axes[2].axis('off')
-        axes[3].hist(self.difference.flatten(), bins=256, color='black')
-        axes[3].set_title('Histogram of Difference (Noise)')
-        axes[3].set_xlabel('Pixel Value')
-        axes[3].set_ylabel('Frequency')
+        fig, axes = plt.subplots(2, 2, figsize=(8, 8))
+        axes[0, 0].imshow(self.image_float, cmap='gray')
+        axes[0, 0].set_title('Original Image')
+        axes[0, 0].axis('off')
+        axes[0, 1].imshow(self.noisy_image, cmap='gray')
+        axes[0, 1].set_title('Noisy Image')
+        axes[0, 1].axis('off')
+        axes[1, 0].imshow(self.difference, cmap='gray')
+        axes[1, 0].set_title('Difference (Noise)')
+        axes[1, 0].axis('off')
+        axes[1, 1].hist(self.difference.flatten(), bins=256, color='black')
+        axes[1, 1].set_title('Histogram of Difference (Noise)')
+        axes[1, 1].set_xlabel('Pixel Value')
+        axes[1, 1].set_ylabel('Frequency')
 
-        plt.suptitle('Gaussian Noise Analysis on Image')
+        plt.suptitle('Gaussian Noise Adition Analysis on Image')
         plt.tight_layout()
         plt.show()
+
 
     def execute(self):
         self.charge_image_as_float()

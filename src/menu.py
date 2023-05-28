@@ -3,10 +3,10 @@ Script created to work as interactive menu during the execution of the code.
 It works in the terminal, please follow the instructions.
 """
 import sys
-from skimage import data
-from .filters.gaussian_noise import GaussianNoise
-# from .filters.filters import apply_filter
-# from .methods.methods import generate_metrics_table
+from skimage import data, io, filters, util
+from .filters.degradation.gaussian_noise import GaussianNoise
+from .filters.reconstruction.median_filter import MedianFilter
+import matplotlib.pyplot as plt
 
 class Menu():
 
@@ -18,10 +18,9 @@ class Menu():
     [2] moon\n \
     [3] camera\n \
     [4] coins\n \
-    [4] hubble_deep_fiel\n \
     [5] Exit\n\n"
         self.error_message = "\nInvalid command, please try again.\n"
-        self.main_options_list = list(range(1, 7))
+        self.main_options_list = list(range(1, 6))
         self.image_name = ""
         self.filters = ['median', 'gaussian', 'wiener', 'laplace']
 
@@ -44,19 +43,51 @@ class Menu():
             elif option == 4:
                 self.image = data.coins()
                 self.image_name = "coins"
-            elif option == 5:
-                self.image = data.hubble_deep_field()
-                self.image_name = "hubble_deep_field"
             else:
                 sys.exit("See you soon!")
-        self.apply_degradation()
         
-    def apply_degradation(self):
-        gaussian_noise = GaussianNoise(self.image, self.image_name)
-        gaussian_noise.execute()
+    def apply_filters(self):
+        self.gaussian_noise = GaussianNoise(self.image, self.image_name)
+        self.gaussian_noise.execute()
+        self.median_filter = MedianFilter(self.gaussian_noise.image_name)
+        self.median_filter.execute()
+
+    def show_summary(self):
+        self.noisy_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/aditive_gaussian_filtered_{self.image_name}.png')
+        self.rebuilt_image = io.imread(f'assets/aditiveGaussianDegradationMedianReconstruction/{self.image_name}/median_rebuilt_{self.image_name}.png')
+        # Configurar el tamaño de la figura y los subplots
+        fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+
+        # Mostrar la imagen original
+        axes[0].imshow(self.image, cmap='gray')
+        axes[0].set_title('Original Image')
+        axes[0].axis('off')
+
+        # Mostrar la imagen degradada con ruido
+        axes[1].imshow(self.noisy_image, cmap='gray')
+        axes[1].set_title('degraded Image')
+        axes[1].axis('off')
+
+        # Mostrar la imagen reconstruida con filtro de mediana
+        axes[2].imshow(self.rebuilt_image, cmap='gray')
+        axes[2].set_title('Filtered Image')
+        axes[2].axis('off')
+
+        # Agregar leyendas en inglés
+        axes[0].set_title('Original Image')
+        axes[1].set_title('degraded Image')
+        axes[2].set_title('rebuilt Image')
+
+        # Ajustar el espacio entre subplots y mostrar la figura
+        plt.suptitle('Analysis of degradation with additive Gaussian noise & median-filtered reconstruction\n')
+        plt.tight_layout()
+        plt.show()
+
 
     def execute(self):
-        self.options()            
+        self.options()  
+        self.apply_filters()   
+        self.show_summary()       
 
 
         

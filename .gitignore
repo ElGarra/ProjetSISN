@@ -1,3 +1,4 @@
 virtualenv/
 .DS_Store
 *.png
+test.py
