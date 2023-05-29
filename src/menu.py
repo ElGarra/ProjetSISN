@@ -10,6 +10,7 @@ from .filters.degradation.convolutional_noise import ConvolutionalNoise
 from .filters.reconstruction.wiener_filter import WienerFilter
 from .methods.methods import ImageComparison
 import matplotlib.pyplot as plt
+from .methods.analyse import analyse
 
 class Menu():
 
@@ -141,13 +142,19 @@ class Menu():
             #comparison_2 = ImageComparison(original_path, rebuilt_path, title_2)
             #comparison_2.execute()
 
-
+    def analysis(self):
+        #set second argument to 1 for normalized data
+        ana = analyse(self.image, 1)
+        ana.execute()
 
     def execute(self):
-        self.options()  
-        self.apply_filters()   
-        self.show_summary()       
-        self.calculate_methods()
+        self.options() 
+        #self.apply_filters()   
+        self.show_summary()
+        self.analysis()       
+        #self.calculate_methods()
+
+
 
 
 
