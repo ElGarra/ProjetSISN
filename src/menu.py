@@ -149,10 +149,10 @@ class Menu():
 
     def execute(self):
         self.options() 
-        #self.apply_filters()   
+        self.apply_filters()   
         self.show_summary()
         self.analysis()       
-        #self.calculate_methods()
+        self.calculate_methods()
 
 
 
