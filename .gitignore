@@ -4,3 +4,4 @@ virtualenv/
 test.py
 test_crypto.py
 _pycache_/
+text.py
