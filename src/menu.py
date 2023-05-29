@@ -136,10 +136,10 @@ class Menu():
             title_1 = method['title_1']
             title_2 = method['title_2']
 
-            comparison_1 = ImageComparison(original_path, degraded_path, title_1)
+            comparison_1 = ImageComparison(original_path, degraded_path, rebuilt_path, title_1)
             comparison_1.execute()
-            comparison_2 = ImageComparison(original_path, rebuilt_path, title_2)
-            comparison_2.execute()
+            #comparison_2 = ImageComparison(original_path, rebuilt_path, title_2)
+            #comparison_2.execute()
 
 
 
