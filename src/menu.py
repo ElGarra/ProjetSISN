@@ -144,18 +144,12 @@ class Menu():
 
     def analysis(self):
         #set second argument to 1 for normalized data
-        ana = analyse(self.image, 1)
+        ana = analyse(self.image, 0, 1)
         ana.execute()
 
     def execute(self):
         self.options() 
-        self.apply_filters()   
-        self.show_summary()
+        #self.apply_filters()   
+        #self.show_summary()
         self.analysis()       
-        self.calculate_methods()
-
-
-
-
-
-        
+        #self.calculate_methods()
