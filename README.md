@@ -34,3 +34,5 @@ python3 main.py
 ```
 
 All the resources generated will be save in the folders created in the first point.
+
+### In case of any doubt, please contact us.
