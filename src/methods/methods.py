@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage import io, metrics
+from skimage import io, metrics, img_as_float
 
 class ImageComparison:
     def __init__(self, image1_path, image2_path, image3_path, title):
