@@ -65,51 +65,57 @@ class Menu():
         noisy_image2 = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/convolutional_gaussian_filtered_{self.image_name}.png')
         rebuilt_image2 = io.imread(f'assets/aditiveConvolutionalGaussianDegradationWienerReconstruction/{self.image_name}/wiener_rebuilt_{self.image_name}.png')
 
-        # Configure the size of the figure and subplots
-        fig, axes = plt.subplots(2, 3, figsize=(12, 8))
+        # Create the first figure and subplots for the first set of images
+        fig1, axes1 = plt.subplots(1, 3, figsize=(12, 4))
 
-        # Set the main titles for each set of images
+        # Set the main title for the first set of images
         main_title1 = 'Analysis of degradation with additive Gaussian noise & median-filtered reconstruction'
-        main_title2 = 'Analysis of degradation with additive + Convolutional Gaussian noise & wiener-filtered reconstruction'
-
-        # Set the main titles for each set of images
-        fig.suptitle(main_title1, fontsize=16)
+        fig1.suptitle(main_title1, fontsize=12)
 
         # Set titles for the first set of images
-        axes[0, 0].set_title('Original Image')
-        axes[0, 1].set_title('Degraded Image')
-        axes[0, 2].set_title('Filtered Image')
+        axes1[0].set_title('Original Image')
+        axes1[1].set_title('Degraded Image')
+        axes1[2].set_title('Filtered Image')
 
         # Show the first set of images
-        axes[0, 0].imshow(self.image, cmap='gray')
-        axes[0, 1].imshow(noisy_image1, cmap='gray')
-        axes[0, 2].imshow(rebuilt_image1, cmap='gray')
+        axes1[0].imshow(self.image, cmap='gray')
+        axes1[1].imshow(noisy_image1, cmap='gray')
+        axes1[2].imshow(rebuilt_image1, cmap='gray')
 
         # Hide the axis labels for the first row
-        axes[0, 0].axis('off')
-        axes[0, 1].axis('off')
-        axes[0, 2].axis('off')
+        axes1[0].axis('off')
+        axes1[1].axis('off')
+        axes1[2].axis('off')
 
-        # Update the main title for the second set of images
-        fig.suptitle(main_title2, fontsize=16)
+        # Adjust the space between subplots in the first figure
+        fig1.tight_layout()
+
+        # Create the second figure and subplots for the second set of images
+        fig2, axes2 = plt.subplots(1, 3, figsize=(12, 4))
+
+        # Set the main title for the second set of images
+        main_title2 = 'Analysis of degradation with additive + Convolutional Gaussian noise & wiener-filtered reconstruction'
+        fig2.suptitle(main_title2, fontsize=12)
 
         # Set titles for the second set of images
-        axes[1, 0].set_title('Original Image')
-        axes[1, 1].set_title('Degraded Image')
-        axes[1, 2].set_title('Filtered Image')
+        axes2[0].set_title('Original Image')
+        axes2[1].set_title('Degraded Image')
+        axes2[2].set_title('Filtered Image')
 
         # Show the second set of images
-        axes[1, 0].imshow(self.image, cmap='gray')
-        axes[1, 1].imshow(noisy_image2, cmap='gray')
-        axes[1, 2].imshow(rebuilt_image2, cmap='gray')
+        axes2[0].imshow(self.image, cmap='gray')
+        axes2[1].imshow(noisy_image2, cmap='gray')
+        axes2[2].imshow(rebuilt_image2, cmap='gray')
 
         # Hide the axis labels for the second row
-        axes[1, 0].axis('off')
-        axes[1, 1].axis('off')
-        axes[1, 2].axis('off')
+        axes2[0].axis('off')
+        axes2[1].axis('off')
+        axes2[2].axis('off')
 
-        # Adjust the space between subplots and show the figure
-        plt.tight_layout()
+        # Adjust the space between subplots in the second figure
+        fig2.tight_layout()
+
+        # Show both figures
         plt.show()
 
     def calculate_methods(self):
